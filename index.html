@@ -1,58 +1,442 @@
-
-
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Preview</title>
+<title>MAOAⅡA ACTIVATION</title>
 
 <style>
-body{
-    background:#111;
-    color:white;
-    font-family:sans-serif;
-    text-align:center;
-    padding:40px;
+* {
+    box-sizing: border-box;
 }
 
-img{
-    width:280px;
-    border-radius:20px;
-    margin:30px 0;
+html {
+    scroll-behavior: smooth;
 }
 
-audio{
-    width:100%;
-    max-width:350px;
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #080a09;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-p{
-    line-height:1.8;
+button,
+input {
+    font: inherit;
+}
+
+/* パスワード画面 */
+#lock-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+        linear-gradient(rgba(8, 10, 9, 0.94), rgba(8, 10, 9, 0.98)),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.025) 3px
+        );
+    transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+
+#lock-screen.unlocked {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.lock-box {
+    width: 100%;
+    max-width: 390px;
+    padding: 38px 24px;
+    border: 1px solid #35423e;
+    background: rgba(14, 18, 17, 0.92);
+    text-align: center;
+}
+
+.system-label {
+    margin-bottom: 24px;
+    color: #7cf2c5;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+.logo {
+    margin: 0;
+    font-size: 31px;
+    font-weight: 700;
+    letter-spacing: 6px;
+}
+
+.activation-title {
+    margin: 12px 0 36px;
+    color: #aab4b0;
+    font-size: 11px;
+    letter-spacing: 4px;
+}
+
+.pass-label {
+    display: block;
+    margin-bottom: 10px;
+    color: #d8dedb;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-align: left;
+}
+
+#passkey {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #52605c;
+    border-radius: 0;
+    outline: none;
+    background: #080a09;
+    color: #ffffff;
+    font-size: 16px;
+    letter-spacing: 3px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#passkey:focus {
+    border-color: #7cf2c5;
+}
+
+#unlock-button {
+    width: 100%;
+    margin-top: 14px;
+    padding: 15px;
+    border: 1px solid #7cf2c5;
+    background: #7cf2c5;
+    color: #07100d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+}
+
+#unlock-button:hover {
+    background: transparent;
+    color: #7cf2c5;
+}
+
+#error-message {
+    min-height: 20px;
+    margin: 14px 0 0;
+    color: #ff7c7c;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.card-number {
+    margin-top: 30px;
+    color: #63706c;
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+/* 本編 */
+#main-content {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+#main-content.visible {
+    opacity: 1;
+}
+
+.container {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 50px 18px 80px;
+}
+
+.header {
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.header-small {
+    margin-bottom: 12px;
+    color: #7cf2c5;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: 6px;
+}
+
+.header-subtitle {
+    margin-top: 12px;
+    color: #89938f;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+.photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 0 22px;
+    border: 1px solid #29332f;
+}
+
+.message {
+    margin: 42px 5px;
+    font-size: 14px;
+    line-height: 2.2;
+    text-align: center;
+}
+
+.section-title {
+    margin: 50px 0 18px;
+    color: #7cf2c5;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+.track {
+    margin-bottom: 15px;
+    padding: 20px;
+    border: 1px solid #303b37;
+    background: #101412;
+}
+
+.track-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.track-number {
+    color: #7cf2c5;
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+.track-title {
+    margin-top: 7px;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.track-status {
+    color: #6f7975;
+    font-size: 8px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+audio {
+    display: block;
+    width: 100%;
+    height: 42px;
+}
+
+.footer {
+    margin-top: 55px;
+    color: #68736e;
+    font-size: 9px;
+    line-height: 2;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 26px;
+        letter-spacing: 5px;
+    }
+
+    .container {
+        padding-top: 38px;
+    }
+
+    .message {
+        font-size: 13px;
+    }
 }
 </style>
-
 </head>
 
 <body>
 
-<h1>NEW SONG</h1>
+<!-- パスワード画面 -->
+<section id="lock-screen">
+    <div class="lock-box">
+        <div class="system-label">AUTHORIZED ACCESS ONLY</div>
 
-<img src="jacket.jpg">
+        <h1 class="logo">MAOAⅡA</h1>
+        <div class="activation-title">ACTIVATION CARD</div>
 
-<p>
-このカードを手に取ってくれたあなたへ。
-</p>
+        <label class="pass-label" for="passkey">ENTER PASSKEY</label>
 
-<p>
-発売前の楽曲を、一足先に公開します。
-</p>
+        <input
+            id="passkey"
+            type="password"
+            inputmode="text"
+            autocomplete="off"
+            placeholder="••••••••"
+        >
 
-<audio controls controlsList="nodownload">
-<source src="song.mp3" type="audio/mpeg">
-</audio>
+        <button id="unlock-button" type="button">
+            UNLOCK
+        </button>
+
+        <p id="error-message"></p>
+
+        <div class="card-number">
+            MODEL NO. MAO-000
+        </div>
+    </div>
+</section>
+
+<!-- 音源ページ -->
+<main id="main-content">
+    <div class="container">
+
+        <header class="header">
+            <div class="header-small">ACCESS GRANTED</div>
+            <h1>MAOAⅡA</h1>
+            <div class="header-subtitle">
+                EXCLUSIVE PRE-RELEASE AUDIO
+            </div>
+        </header>
+
+        <img
+            class="photo"
+            src="photo1.jpg"
+            alt="MAOAⅡA photo 1"
+        >
+
+        <div class="message">
+            このカードを手に取ってくれたあなたへ。<br>
+            リリース前の楽曲を、一足先にお届けします。
+        </div>
+
+        <div class="section-title">UNRELEASED TRACKS</div>
+
+        <section class="track">
+            <div class="track-top">
+                <div>
+                    <div class="track-number">TRACK 01</div>
+                    <div class="track-title">楽曲タイトル 1</div>
+                </div>
+                <div class="track-status">UNRELEASED</div>
+            </div>
+
+            <audio controls controlsList="nodownload">
+                <source src="song1.mp3" type="audio/mpeg">
+                このブラウザでは音源を再生できません。
+            </audio>
+        </section>
+
+        <section class="track">
+            <div class="track-top">
+                <div>
+                    <div class="track-number">TRACK 02</div>
+                    <div class="track-title">楽曲タイトル 2</div>
+                </div>
+                <div class="track-status">UNRELEASED</div>
+            </div>
+
+            <audio controls controlsList="nodownload">
+                <source src="song2.mp3" type="audio/mpeg">
+                このブラウザでは音源を再生できません。
+            </audio>
+        </section>
+
+        <section class="track">
+            <div class="track-top">
+                <div>
+                    <div class="track-number">TRACK 03</div>
+                    <div class="track-title">楽曲タイトル 3</div>
+                </div>
+                <div class="track-status">UNRELEASED</div>
+            </div>
+
+            <audio controls controlsList="nodownload">
+                <source src="song3.mp3" type="audio/mpeg">
+                このブラウザでは音源を再生できません。
+            </audio>
+        </section>
+
+        <img
+            class="photo"
+            src="photo2.jpg"
+            alt="MAOAⅡA photo 2"
+            style="margin-top: 45px;"
+        >
+
+        <footer class="footer">
+            FOR ACTIVATION CARD HOLDERS ONLY<br>
+            PLEASE DO NOT SHARE THIS PAGE
+        </footer>
+
+    </div>
+</main>
+
+<script>
+const correctPasskey = "MA2026000";
+
+const lockScreen = document.getElementById("lock-screen");
+const mainContent = document.getElementById("main-content");
+const passkeyInput = document.getElementById("passkey");
+const unlockButton = document.getElementById("unlock-button");
+const errorMessage = document.getElementById("error-message");
+
+function unlockPage() {
+    const enteredPasskey = passkeyInput.value
+        .trim()
+        .toUpperCase();
+
+    if (enteredPasskey === correctPasskey.toUpperCase()) {
+        errorMessage.textContent = "ACCESS GRANTED";
+
+        sessionStorage.setItem("maoaUnlocked", "true");
+
+        setTimeout(() => {
+            lockScreen.classList.add("unlocked");
+            mainContent.classList.add("visible");
+            document.body.style.overflow = "auto";
+        }, 500);
+    } else {
+        errorMessage.textContent = "INVALID PASSKEY";
+        passkeyInput.value = "";
+        passkeyInput.focus();
+    }
+}
+
+unlockButton.addEventListener("click", unlockPage);
+
+passkeyInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        unlockPage();
+    }
+});
+
+if (sessionStorage.getItem("maoaUnlocked") === "true") {
+    lockScreen.classList.add("unlocked");
+    mainContent.classList.add("visible");
+} else {
+    document.body.style.overflow = "hidden";
+}
+</script>
 
 </body>
 </html>
