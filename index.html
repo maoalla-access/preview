@@ -656,6 +656,50 @@ body::after {
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
     }
+
+/* 再生中トラック */
+.track.is-playing {
+    border-color: rgba(112, 245, 195, 0.8);
+    background:
+        linear-gradient(
+            115deg,
+            rgba(112, 245, 195, 0.09),
+            transparent 55%
+        ),
+        rgba(13, 19, 17, 0.97);
+    box-shadow:
+        0 20px 55px rgba(0, 0, 0, 0.45),
+        0 0 30px rgba(112, 245, 195, 0.16);
+}
+
+.track.is-playing::before {
+    opacity: 1;
+    width: 4px;
+    animation: playingPulse 1.6s ease-in-out infinite;
+}
+
+.track.is-playing .track-number,
+.track.is-playing .track-title {
+    color: #8affd2;
+    text-shadow: 0 0 14px rgba(112, 245, 195, 0.38);
+}
+
+.track.is-playing .track-status {
+    color: #07100d;
+    border-color: #70f5c3;
+    background: #70f5c3;
+}
+
+@keyframes playingPulse {
+    0%,
+    100% {
+        box-shadow: 0 0 8px rgba(112, 245, 195, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 22px rgba(112, 245, 195, 0.95);
+    }
+}
     
 }</style>
 </head>
@@ -815,6 +859,49 @@ if (sessionStorage.getItem("maoaUnlocked") === "true") {
 } else {
     document.body.style.overflow = "hidden";
 }
+
+    
+/* 音源プレイヤー制御 */
+const audioPlayers = document.querySelectorAll("audio");
+
+audioPlayers.forEach((audio) => {
+    audio.addEventListener("play", () => {
+        audioPlayers.forEach((otherAudio) => {
+            const otherTrack = otherAudio.closest(".track");
+
+            if (otherAudio !== audio) {
+                otherAudio.pause();
+
+                if (otherTrack) {
+                    otherTrack.classList.remove("is-playing");
+                }
+            }
+        });
+
+        const currentTrack = audio.closest(".track");
+
+        if (currentTrack) {
+            currentTrack.classList.add("is-playing");
+        }
+    });
+
+    audio.addEventListener("pause", () => {
+        const currentTrack = audio.closest(".track");
+
+        if (currentTrack && audio.currentTime !== audio.duration) {
+            currentTrack.classList.remove("is-playing");
+        }
+    });
+
+    audio.addEventListener("ended", () => {
+        const currentTrack = audio.closest(".track");
+
+        if (currentTrack) {
+            currentTrack.classList.remove("is-playing");
+        }
+    });
+});
+    
 </script>
 
 </body>
