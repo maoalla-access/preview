@@ -271,7 +271,393 @@ audio {
         font-size: 13px;
     }
 }
-</style>
+
+/* ========================================
+   MAOAⅡA VISUAL UPGRADE
+   既存の文章・曲名・構造は変更しません
+======================================== */
+
+/* カラー設定 */
+:root {
+    --accent: #70f5c3;
+    --accent-soft: rgba(112, 245, 195, 0.16);
+    --accent-line: rgba(112, 245, 195, 0.38);
+    --surface: rgba(13, 18, 16, 0.92);
+    --line: rgba(255, 255, 255, 0.13);
+}
+
+/* 背景のグリッド */
+body {
+    position: relative;
+    background:
+        linear-gradient(
+            rgba(112, 245, 195, 0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(112, 245, 195, 0.025) 1px,
+            transparent 1px
+        ),
+        radial-gradient(
+            circle at top,
+            rgba(112, 245, 195, 0.07),
+            transparent 38%
+        ),
+        #070908;
+    background-size:
+        28px 28px,
+        28px 28px,
+        100% 100%,
+        100% 100%;
+}
+
+/* 画面全体の薄い走査線 */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0.16;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0,
+        transparent 3px,
+        rgba(255, 255, 255, 0.025) 4px
+    );
+}
+
+/* 上部の細い発光ライン */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 2px;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--accent),
+        transparent
+    );
+    box-shadow: 0 0 14px var(--accent);
+    animation: topLinePulse 3s ease-in-out infinite;
+}
+
+@keyframes topLinePulse {
+    0%, 100% {
+        opacity: 0.35;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* パスワード入力ボックス */
+.lock-box {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--accent-line);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.025),
+            transparent 45%
+        ),
+        rgba(9, 13, 11, 0.96);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.025),
+        0 24px 80px rgba(0, 0, 0, 0.6),
+        0 0 45px rgba(112, 245, 195, 0.06);
+}
+
+/* パスワード画面の四隅 */
+.lock-box::before,
+.lock-box::after {
+    content: "";
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    pointer-events: none;
+}
+
+.lock-box::before {
+    top: 10px;
+    left: 10px;
+    border-top: 1px solid var(--accent);
+    border-left: 1px solid var(--accent);
+}
+
+.lock-box::after {
+    right: 10px;
+    bottom: 10px;
+    border-right: 1px solid var(--accent);
+    border-bottom: 1px solid var(--accent);
+}
+
+/* ロゴの発光を控えめに追加 */
+.logo,
+.header h1 {
+    text-shadow:
+        0 0 18px rgba(112, 245, 195, 0.14),
+        0 0 42px rgba(112, 245, 195, 0.06);
+}
+
+/* ステータス文字の点滅 */
+.system-label,
+.header-small {
+    animation: statusBlink 2.4s steps(1) infinite;
+}
+
+@keyframes statusBlink {
+    0%, 88%, 100% {
+        opacity: 1;
+    }
+
+    89%, 94% {
+        opacity: 0.35;
+    }
+}
+
+/* パスワード入力欄 */
+#passkey {
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+#passkey:focus {
+    background: rgba(112, 245, 195, 0.035);
+    box-shadow:
+        0 0 0 3px rgba(112, 245, 195, 0.06),
+        inset 0 0 25px rgba(112, 245, 195, 0.025);
+}
+
+/* UNLOCKボタン */
+#unlock-button {
+    position: relative;
+    overflow: hidden;
+    transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.15s ease;
+}
+
+#unlock-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -130%;
+    width: 70%;
+    height: 100%;
+    transform: skewX(-22deg);
+    background: rgba(255, 255, 255, 0.38);
+    transition: left 0.55s ease;
+}
+
+#unlock-button:hover::before {
+    left: 150%;
+}
+
+#unlock-button:active {
+    transform: scale(0.985);
+}
+
+/* 写真 */
+.photo {
+    position: relative;
+    filter:
+        contrast(1.04)
+        saturate(0.92);
+    box-shadow:
+        0 18px 60px rgba(0, 0, 0, 0.38),
+        0 0 0 1px rgba(112, 245, 195, 0.05);
+    transition:
+        transform 0.5s ease,
+        filter 0.5s ease,
+        box-shadow 0.5s ease;
+}
+
+.photo:hover {
+    transform: translateY(-3px);
+    filter:
+        contrast(1.07)
+        saturate(1);
+    box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.48),
+        0 0 25px rgba(112, 245, 195, 0.08);
+}
+
+/* メッセージ */
+.message {
+    position: relative;
+    padding: 28px 18px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(112, 245, 195, 0.025),
+        transparent
+    );
+}
+
+/* トラックカード */
+.track {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(
+            115deg,
+            rgba(112, 245, 195, 0.025),
+            transparent 45%
+        ),
+        var(--surface);
+    border-color: var(--line);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.22);
+    transition:
+        transform 0.28s ease,
+        border-color 0.28s ease,
+        box-shadow 0.28s ease;
+}
+
+.track::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    opacity: 0.45;
+    box-shadow: 0 0 13px var(--accent);
+    transition: opacity 0.28s ease;
+}
+
+.track:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-line);
+    box-shadow:
+        0 20px 48px rgba(0, 0, 0, 0.36),
+        0 0 24px rgba(112, 245, 195, 0.055);
+}
+
+.track:hover::before {
+    opacity: 1;
+}
+
+/* トラック番号 */
+.track-number {
+    text-shadow: 0 0 12px rgba(112, 245, 195, 0.32);
+}
+
+/* UNRELEASED等の右上表示 */
+.track-status {
+    padding: 5px 7px;
+    border: 1px solid rgba(112, 245, 195, 0.22);
+    background: rgba(112, 245, 195, 0.035);
+}
+
+/* セクション見出し */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        var(--accent-line),
+        transparent
+    );
+}
+
+/* フッター */
+.footer {
+    position: relative;
+    padding-top: 30px;
+}
+
+.footer::before {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 1px;
+    margin: 0 auto 26px;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+}
+
+/* 本編が開いたときの登場演出 */
+#main-content.visible .header,
+#main-content.visible .photo,
+#main-content.visible .message,
+#main-content.visible .section-title,
+#main-content.visible .track,
+#main-content.visible .footer {
+    animation: contentReveal 0.85s ease both;
+}
+
+#main-content.visible .photo {
+    animation-delay: 0.08s;
+}
+
+#main-content.visible .message {
+    animation-delay: 0.16s;
+}
+
+#main-content.visible .section-title {
+    animation-delay: 0.22s;
+}
+
+#main-content.visible .track:nth-of-type(1) {
+    animation-delay: 0.28s;
+}
+
+#main-content.visible .track:nth-of-type(2) {
+    animation-delay: 0.35s;
+}
+
+#main-content.visible .track:nth-of-type(3) {
+    animation-delay: 0.42s;
+}
+
+@keyframes contentReveal {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+        filter: blur(3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* 動きを減らす設定の人への配慮 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+    
+}</style>
 </head>
 
 <body>
